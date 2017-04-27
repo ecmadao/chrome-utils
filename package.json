@@ -2,10 +2,10 @@
   "name": "chrome-utils",
   "version": "0.0.1-beta.2",
   "description": "Some utils that help to build chrome extension",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "babel lib -d dist --copy-files",
-    "lint": "./node_modules/eslint/bin/eslint.js lib",
+    "build": "babel src -d lib --copy-files",
+    "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "in-publish && npm run build || not-in-publish",
     "tag": "git tag npm-v$npm_package_version",
@@ -15,7 +15,8 @@
     "chrome",
     "chrome-extension",
     "chrome-runtime",
-    "chrome-storage"
+    "chrome-storage",
+    "chrome-i18n"
   ],
   "author": "ecmadao",
   "license": "MIT",
