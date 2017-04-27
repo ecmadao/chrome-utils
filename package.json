@@ -1,6 +1,6 @@
 {
   "name": "chrome-utils",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.1",
   "description": "Some utils that help to build chrome extension",
   "main": "dist/index.js",
   "scripts": {
