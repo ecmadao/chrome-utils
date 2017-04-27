@@ -1,6 +1,6 @@
 {
   "name": "chrome-utils",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.3",
   "description": "Some utils that help to build chrome extension",
   "main": "lib/index.js",
   "scripts": {
