@@ -7,6 +7,12 @@ const _rawSet = (obj, resolve) => {
   });
 };
 
+const _rawRemove = (key, callback) => {
+  chrome.storage.sync.remove(key, () => {
+    callback && callback(null);
+  });
+};
+
 const getStorage = (key, resolve, reject = null) => {
   const mainKey = key.split('.')[0];
   chrome.storage.sync.get(mainKey, (result) => {
@@ -23,7 +29,7 @@ const setStorage = (...args) => {
   const resolve = checkType.isFunc(lastArg) ? lastArg : null;
   if (checkType.isString(firstArg)) {
     const obj = createObj(firstArg, args[1]);
-    mergeStorage(firstArg, obj, resolve);
+    _rawSet(obj, resolve);
   } else {
     _rawSet(firstArg, resolve);
   }
@@ -69,9 +75,12 @@ const clearStorage = (callback) => {
 };
 
 const removeStorage = (key, callback) => {
-  chrome.storage.sync.remove(key, () => {
-    callback && callback();
-  });
+  const keys = key.split('.');
+  if (keys.length === 1) {
+    _rawRemove(key, callback);
+  } else {
+    setStorage(key, null, callback);
+  }
 };
 
 export default {

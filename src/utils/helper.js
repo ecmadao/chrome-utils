@@ -37,8 +37,11 @@ export const getValue = (object, key) => {
  * e.g.
  * key = 'a.b.c';
  * value = 1;
- *
  * ===> result = {a: {b: {c: 1}}}
+ *
+ * key = 'a';
+ * value = 1;
+ * ===> result = { a: 1 }
  */
 export const createObj = (key, value) => {
   const sections = key.split('.');

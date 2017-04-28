@@ -85,6 +85,13 @@ const listeners = [listener1, listener2, listener3];
 ```javascript
 store.clear();
 store.remove(key[, callback]);
+
+// example
+store.set({a: {b: 1, c: 2}});
+store.get('a'); // {b: 1, c: 2}
+
+store.remove('a.b'); // {b: null, c: 2}
+store.remove('a'); // null
 ```
 
 ## message
@@ -106,7 +113,7 @@ const msg = {
 };
 ```
 
-### send to tabs
+### send msg to tabs
 
 ```javascript
 message.sendToTabs(msg[, query]);
@@ -121,7 +128,7 @@ message.register(...listeners);
 const listener = {
   callback, // required,
   type // not required, but if you use it, this listener will only listen same type msg
-}
+};
 ```
 
 ## i18n
@@ -129,5 +136,5 @@ const listener = {
 ### get message
 
 ```javascript
-i18n.message(...args);
+i18n.get(...args);
 ```
