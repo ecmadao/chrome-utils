@@ -1,5 +1,11 @@
-import objectAssign from 'object-assign';
-import { getValue } from '../utils/helper';
+import objectAssign from '../utils/object-assign';
+import { getValue, checkType, createObj } from '../utils/helper';
+
+const _rawSet = (obj, resolve) => {
+  chrome.storage.sync.set(obj, () => {
+    resolve && resolve();
+  });
+};
 
 const getStorage = (key, resolve, reject = null) => {
   const mainKey = key.split('.')[0];
@@ -11,15 +17,23 @@ const getStorage = (key, resolve, reject = null) => {
   });
 };
 
-const setStorage = (obj, resolve) => {
-  chrome.storage.sync.set(obj, () => {
-    resolve && resolve();
-  });
+const setStorage = (...args) => {
+  const firstArg = args[0];
+  const lastArg = args.slice(-1)[0];
+  const resolve = checkType.isFunc(lastArg) ? lastArg : null;
+  if (checkType.isString(firstArg)) {
+    const obj = createObj(firstArg, args[1]);
+    mergeStorage(firstArg, obj, resolve);
+  } else {
+    _rawSet(firstArg, resolve);
+  }
 };
 
-const mergeStorage = (key, obj, resolve) => {
-  getStorage(key, (value) => {
-    const newObj = value ? objectAssign({}, value, obj) : obj;
+const mergeStorage = (key, value, resolve) => {
+  getStorage(key, (result) => {
+    const newObj = result && checkType.isObj(result)
+      ? objectAssign({}, result, value)
+      : value;
     setStorage({
       [key]: newObj
     }, resolve);

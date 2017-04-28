@@ -8,5 +8,5 @@ const getMessage = (...args) => chrome.i18n.getMessage(...args);
 
 export default {
   acceptLanguages: getAcceptLanguages,
-  message: getMessage
+  get: getMessage
 };
