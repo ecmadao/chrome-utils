@@ -1,6 +1,6 @@
 {
   "name": "chrome-utils",
-  "version": "0.0.1-beta.4",
+  "version": "0.0.1-beta.5",
   "description": "Some utils that help to build chrome extension",
   "main": "lib/index.js",
   "scripts": {
@@ -22,8 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "^6.18.2",
-    "babel-polyfill": "^6.16.0",
-    "object-assign": "^4.1.0"
+    "babel-polyfill": "^6.16.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
