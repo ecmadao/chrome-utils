@@ -24,11 +24,13 @@ Actually, by raw `chrome.storage` API:
 
 - you can only get the top key-value
 - you can only get `a` but not `a.b.d`.
-- if you wanna update a value in a object, you must get it from store first, then update to whole object, then save it to store.
+- if you wanna update a value in a object, you must get it from store first, then update the whole object, finally, save it to store.
 
 WTF?
 
-- get & set
+---
+
+### get & set
 
 ```javascript
 store.get(key[, resolve, reject]);
@@ -52,7 +54,7 @@ store.set('a.b': 3);
 store.get('a.b'); // update, get 3
 ```
 
-- merge
+### merge
 
 If target value exist, then try to merge it; otherwise, create a new key-value object
 
@@ -65,7 +67,7 @@ store.merge('a', {c: 2}); // result: {a: {b: 1, c: 2}}
 store.merge('a.b', 2); // update: {a: {b: 2, c: 2}}
 ```
 
-- listen
+### listen
 
 ```javascript
 store.listen(...listeners);
@@ -78,7 +80,7 @@ const listener = {
 const listeners = [listener1, listener2, listener3];
 ```
 
-- clear & remove
+### clear & remove
 
 ```javascript
 store.clear();
@@ -87,7 +89,12 @@ store.remove(key[, callback]);
 
 ## message
 
-- send message
+Compare with raw API `chrome.runtime.onMessage` & `chrome.runtime.sendMessage`, it:
+
+- force user add `type` for each msg
+- if msg listener as a `type` key, it will only response to target type msg
+
+### send message
 
 ```javascript
 message.sendMsg(msg[, callback]);
@@ -99,13 +106,13 @@ const msg = {
 };
 ```
 
-- send to tabs
+### send to tabs
 
 ```javascript
 message.sendToTabs(msg[, query]);
 ```
 
-- register listener
+### register listener
 
 ```javascript
 message.register(...listeners);
@@ -119,7 +126,7 @@ const listener = {
 
 ## i18n
 
-- get message
+### get message
 
 ```javascript
 i18n.message(...args);
