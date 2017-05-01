@@ -49,7 +49,7 @@ const mergeStorage = (key, value, resolve) => {
 const listenChange = (...args) => {
   chrome.storage.onChanged.addListener((changes, namespace) => {
     Object.keys(changes).forEach((key) => {
-      const listener = args.filter(arg => arg.key === key)[0];
+      const listener = args.filter(arg => arg.key.split('.')[0] === key)[0];
       if (listener) {
         const storageChange = changes[key];
         if (storageChange) {
@@ -61,7 +61,7 @@ const listenChange = (...args) => {
             oldValue = getValue(oldValue, listenKey);
           }
           const changed = newValue !== oldValue;
-          changed && newValue && listener.callback && listener.callback(newValue);
+          changed && listener.callback && listener.callback(newValue);
         }
       }
     });
