@@ -1,13 +1,10 @@
-const _response = (msg, listeners) => {
-  for (let i = 0; i < listeners.length; i++) {
-    const listener = listeners[i];
-    _sendCallback(msg, listener);
-  }
-};
+import { checkType } from '../utils/helper';
 
 const _sendCallback = (msg, listener) => {
   const checked = !listener.type || listener.type === msg.type;
-  checked && listener.callback && listener.callback(msg.data);
+  if (checked && checkType.isFunc(listener.callback)) {
+    listener.callback(msg);
+  }
 };
 
 const _checkListener = (listeners) => {
@@ -27,25 +24,37 @@ const _checkMsg = (msg) => {
 const register = (...args) => {
   _checkListener(args);
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    _response(msg, args);
+    for (let i = 0; i < args.length; i++) {
+      const listener = args[i];
+      _sendCallback(msg, listener);
+    }
   });
 };
 
 const sendMsg = (msg, callback) => {
   _checkMsg(msg);
-  chrome.runtime.sendMessage(msg, response => callback && callback(response));
+  chrome.runtime.sendMessage(msg, (response) => {
+    checkType.isFunc(callback) && callback(response);
+  });
 };
 
-const sendToTabs = (msg = {}, query = {}) => {
+const sendToTab = (msg, tabId) => {
+  chrome.tabs.sendMessage(tabId, msg);
+};
+
+const sendToTabs = (msg = {}, query = {}, filterTabs = null) => {
   chrome.tabs.query(query, (tabs) => {
-    tabs.forEach((tab) => {
-      chrome.tabs.sendMessage(tab.id, msg);
-    });
+    let targetTabs = tabs;
+    if (checkType.isFunc(filterTabs)) {
+      targetTabs = filterTabs(tabs);
+    }
+    targetTabs.forEach(tab => sendToTab(msg, tab.id));
   });
 };
 
 export default {
   register,
   sendMsg,
+  sendToTab,
   sendToTabs
 };
