@@ -1,3 +1,5 @@
+export const timestamp = () => Math.floor(Date.now() / 1000);
+
 const isWhat = (target, targetType) => {
   return Object.prototype.toString.call(target) === targetType;
 };
@@ -5,7 +7,9 @@ const isWhat = (target, targetType) => {
 export const checkType = {
   isFunc: (func) => isWhat(func, '[object Function]'),
   isString: (string) => isWhat(string, '[object String]'),
-  isObj: (obj) => isWhat(obj, '[object Object]')
+  isObj: (obj) => isWhat(obj, '[object Object]'),
+  isNumber: (obj) => isWhat(obj, '[object Number]'),
+  isArray: (obj) => isWhat(obj, '[object Array]')
 };
 
 /*
@@ -25,10 +29,43 @@ export const getValue = (object, key) => {
   if (!checkType.isObj(object)) return null;
   const sections = key.split('.');
   let result = object;
-  sections.forEach((section) => {
-    if (result) result = result[section];
-  });
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i];
+    if (result && checkType.isObj(result)) {
+      const { _value, _expire } = result;
+      if (!_value) {
+        const sectionObj = result[section];
+				result = sectionObj['_value'] ? sectionObj['_value'] : sectionObj;
+				continue;
+      }
+      if (checkType.isObj(_value)) {
+        result = _value[section];
+      } else {
+        result = _value;
+      }
+    } else if (i === sections.length - 1) {
+      result = undefined;
+      break;
+    }
+  }
   return result;
+};
+
+export const getExpire = (object, key) => {
+  if (!checkType.isObj(object)) return null;
+  const sections = key.split('.');
+  let expire = null;
+  let current = object;
+  sections.forEach((section) => {
+    current = current[section]
+      ? current[section]
+      : current;
+
+    if (checkType.isObj(current) && current['_expire']) {
+      expire = current['_expire'];
+    }
+  });
+  return expire;
 };
 
 /*

@@ -9,12 +9,16 @@ $ npm i chrome-utils --save
 ```
 
 ```javascript
+// es6
 import { store, message, i18n } from 'chrome-utils';
+
+// es5
+const store = require('chrome-utils').store;
 ```
 
 ## Api
 
-## store
+### store
 
 `chrome.storage` API is anti-human, for example, if you saved a non-plain object to store, `{a: {b: 1, c: {d: 2}}}`, then how to directly get the value of `d` from it?
 
@@ -30,20 +34,14 @@ WTF?
 
 ---
 
-### get & set
+#### get & set
 
 ```javascript
 store.get(key[, resolve, reject]);
-store.set(obj[, resolve]);
-store.set(key, value[, resolve]);
+store.set(key, value[, options]);
 
 // usage example
-store.set({
-  a: {
-    c: 1
-  }
-});
-// or store.set('a.c', 1);
+store.set('a.c', 1);
 store.get('a'); // {c: 1}
 
 store.set('a.b': 2);
@@ -54,7 +52,7 @@ store.set('a.b': 3);
 store.get('a.b'); // update, get 3
 ```
 
-### merge
+#### merge
 
 If target value exist, then try to merge it; otherwise, create a new key-value object
 
@@ -67,7 +65,7 @@ store.merge('a', {c: 2}); // result: {a: {b: 1, c: 2}}
 store.merge('a.b', 2); // update: {a: {b: 2, c: 2}}
 ```
 
-### listen
+#### listen
 
 ```javascript
 store.listen(...listeners);
@@ -80,7 +78,7 @@ const listener = {
 const listeners = [listener1, listener2, listener3];
 ```
 
-### clear & remove
+#### clear & remove
 
 ```javascript
 store.clear();
@@ -94,14 +92,14 @@ store.remove('a.b'); // {b: null, c: 2}
 store.remove('a'); // null
 ```
 
-## message
+### message
 
 Compare with raw API `chrome.runtime.onMessage` & `chrome.runtime.sendMessage`, it:
 
 - force user add `type` for each msg
 - if msg listener as a `type` key, it will only response to target type msg
 
-### send message
+#### send message
 
 ```javascript
 message.sendMsg(msg[, callback]);
@@ -113,13 +111,13 @@ const msg = {
 };
 ```
 
-### send msg to tabs
+#### send msg to tabs
 
 ```javascript
 message.sendToTabs(msg[, query]);
 ```
 
-### register listener
+#### register listener
 
 ```javascript
 message.register(...listeners);
@@ -131,10 +129,17 @@ const listener = {
 };
 ```
 
-## i18n
+### i18n
 
-### get message
+#### get message
 
 ```javascript
 i18n.get(...args);
 ```
+
+## Todo
+
+- [ ] remove `merge` api
+- [x] expire time for store
+- [x] test
+- [ ] more use case

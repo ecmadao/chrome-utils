@@ -1,5 +1,5 @@
 import objectAssign from '../utils/object-assign';
-import { getValue, checkType, createObj } from '../utils/helper';
+import { getValue, getExpire, checkType, createObj, timestamp } from '../utils/helper';
 
 const _rawSet = (obj, resolve) => {
   chrome.storage.sync.set(obj, () => {
@@ -13,26 +13,37 @@ const _rawRemove = (key, callback) => {
   });
 };
 
+export const _combineObj = (key, value, expire = null) => {
+  if (!checkType.isString(key)) {
+    throw new Error('first arg should be a string');
+  }
+  const _expire = checkType.isNumber(expire)
+    ? timestamp() + expire
+    : null;
+
+  return createObj(key, {
+    _value: value,
+    _expire
+  });
+};
+
 const getStorage = (key, resolve, reject = null) => {
   const mainKey = key.split('.')[0];
   chrome.storage.sync.get(mainKey, (result) => {
     const value = getValue(result, key);
-    value ? resolve && resolve(value) : (
-      reject ? reject && reject() : resolve && resolve(value)
+    const expire = getExpire(result, key);
+
+    const isExpire = expire !== null && timestamp() > expire;
+    value && !isExpire ? resolve && resolve(value) : (
+      reject ? reject && reject() : resolve && resolve(null)
     );
   });
 };
 
-const setStorage = (...args) => {
-  const firstArg = args[0];
-  const lastArg = args.slice(-1)[0];
-  const resolve = checkType.isFunc(lastArg) ? lastArg : null;
-  if (checkType.isString(firstArg)) {
-    const obj = createObj(firstArg, args[1]);
-    _rawSet(obj, resolve);
-  } else {
-    _rawSet(firstArg, resolve);
-  }
+const setStorage = (key, value, options = {}) => {
+  const obj = _combineObj(key, value, options.expire);
+  const resolve = checkType.isFunc(options.callback) ? options.callback : null;
+  _rawSet(obj, resolve);
 };
 
 const mergeStorage = (key, value, resolve) => {
@@ -40,9 +51,8 @@ const mergeStorage = (key, value, resolve) => {
     const newObj = result && checkType.isObj(result)
       ? objectAssign({}, result, value)
       : value;
-    setStorage({
-      [key]: newObj
-    }, resolve);
+
+    setStorage(key, newObj, { callback: resolve });
   });
 };
 
@@ -53,13 +63,8 @@ const listenChange = (...args) => {
       if (listener) {
         const storageChange = changes[key];
         if (storageChange) {
-          const listenKey = listener.key.split('.').slice(1).join('.');
-          let newValue = storageChange.newValue;
-          let oldValue = storageChange.oldValue;
-          if (listenKey) {
-            newValue = getValue(newValue, listenKey);
-            oldValue = getValue(oldValue, listenKey);
-          }
+          const newValue = getValue({ [key]: storageChange.newValue }, listener.key);
+          const oldValue = getValue({ [key]: storageChange.oldValue }, listener.key);
           const changed = newValue !== oldValue;
           changed && listener.callback && listener.callback(newValue);
         }
