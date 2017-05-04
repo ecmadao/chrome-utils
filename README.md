@@ -36,6 +36,8 @@ WTF?
 
 #### get & set
 
+If target value exist, then auto to merge it
+
 ```javascript
 store.get(key[, resolve, reject]);
 store.set(key, value[, options]);
@@ -50,19 +52,6 @@ store.get('a.b'); // directly get b, return 2
 
 store.set('a.b': 3);
 store.get('a.b'); // update, get 3
-```
-
-#### merge
-
-If target value exist, then try to merge it; otherwise, create a new key-value object
-
-```javascript
-store.merge(key, value[, resolve]);
-
-store.get('a'); // null
-store.merge('a.b', 1); // create new object: {a: {b: 1}}
-store.merge('a', {c: 2}); // result: {a: {b: 1, c: 2}}
-store.merge('a.b', 2); // update: {a: {b: 2, c: 2}}
 ```
 
 #### listen

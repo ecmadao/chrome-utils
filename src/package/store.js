@@ -7,6 +7,12 @@ const _rawSet = (obj, resolve) => {
   });
 };
 
+const _rowGet = (key, resolve) => {
+  chrome.storage.sync.get(key, (result) => {
+    resolve && resolve(result);
+  });
+};
+
 const _rawRemove = (key, callback) => {
   chrome.storage.sync.remove(key, () => {
     callback && callback(null);
@@ -29,30 +35,33 @@ export const _combineObj = (key, value, expire = null) => {
 
 const getStorage = (key, resolve, reject = null) => {
   const mainKey = key.split('.')[0];
-  chrome.storage.sync.get(mainKey, (result) => {
+
+  const callback = (result) => {
     const value = getValue(result, key);
     const expire = getExpire(result, key);
-
     const isExpire = expire !== null && timestamp() > expire;
-    value && !isExpire ? resolve && resolve(value) : (
-      reject ? reject && reject() : resolve && resolve(null)
-    );
-  });
+
+    (value !== null && typeof value !== 'undefined') && !isExpire
+      ? resolve && resolve(value)
+      : (reject
+          ? reject && reject()
+          : resolve && resolve(null)
+        );
+  };
+  _rowGet(mainKey, callback);
 };
 
 const setStorage = (key, value, options = {}) => {
-  const obj = _combineObj(key, value, options.expire);
   const resolve = checkType.isFunc(options.callback) ? options.callback : null;
-  _rawSet(obj, resolve);
-};
 
-const mergeStorage = (key, value, resolve) => {
   getStorage(key, (result) => {
-    const newObj = result && checkType.isObj(result)
+
+    const newValue = result && checkType.isObj(result)
       ? objectAssign({}, result, value)
       : value;
+    const obj = _combineObj(key, newValue, options.expire);
 
-    setStorage(key, newObj, { callback: resolve });
+    _rawSet(obj, resolve);
   });
 };
 
@@ -91,7 +100,6 @@ const removeStorage = (key, callback) => {
 export default {
   get: getStorage,
   set: setStorage,
-  merge: mergeStorage,
   listen: listenChange,
   clear: clearStorage,
   remove: removeStorage

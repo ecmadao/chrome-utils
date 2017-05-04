@@ -35,7 +35,7 @@ export const getValue = (object, key) => {
       const { _value, _expire } = result;
       if (!_value) {
         const sectionObj = result[section];
-				result = sectionObj['_value'] ? sectionObj['_value'] : sectionObj;
+				result = sectionObj && sectionObj['_value'] ? sectionObj['_value'] : sectionObj;
 				continue;
       }
       if (checkType.isObj(_value)) {

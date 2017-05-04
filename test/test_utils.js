@@ -3,7 +3,7 @@ import { getValue, getExpire, checkType, createObj } from '../src/utils/helper';
 import objectAssign from '../src/utils/object-assign';
 
 describe('Utils Test', () => {
-  describe('checkType test', () => {
+  describe('test checkType', () => {
     it('should check String', () => {
       expect(checkType.isString(1)).to.equal(false);
       expect(checkType.isString('1')).to.equal(true);
@@ -32,7 +32,7 @@ describe('Utils Test', () => {
     });
   });
 
-  describe('getValue & getExpire test', () => {
+  describe('test getValue & getExpire', () => {
     it('should create object correctly', () => {
       const results = {
         a: {
@@ -156,7 +156,7 @@ describe('Utils Test', () => {
     });
   });
 
-  describe('object-assign test', () => {
+  describe('test object-assign', () => {
     it('should merge object without modify origin', () => {
       const origin = { a: 1, b: 2 };
       const newObj = { a: 2, c: 3 };
