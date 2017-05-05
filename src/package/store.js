@@ -19,6 +19,12 @@ const _rawRemove = (key, callback) => {
   });
 };
 
+const _rawClear = (callback) => {
+  chrome.storage.sync.clear(() => {
+    callback && callback();
+  });
+};
+
 export const _combineObj = (key, value, expire = null) => {
   if (!checkType.isString(key)) {
     throw new Error('first arg should be a string');
@@ -55,7 +61,6 @@ const setStorage = (key, value, options = {}) => {
   const resolve = checkType.isFunc(options.callback) ? options.callback : null;
 
   getStorage(key, (result) => {
-
     const newValue = result && checkType.isObj(result)
       ? objectAssign({}, result, value)
       : value;
@@ -83,9 +88,7 @@ const listenChange = (...args) => {
 };
 
 const clearStorage = (callback) => {
-  chrome.storage.sync.clear(() => {
-    callback && callback();
-  });
+  _rawClear(callback);
 };
 
 const removeStorage = (key, callback) => {
@@ -93,7 +96,7 @@ const removeStorage = (key, callback) => {
   if (keys.length === 1) {
     _rawRemove(key, callback);
   } else {
-    setStorage(key, null, callback);
+    setStorage(key, null, { callback });
   }
 };
 
