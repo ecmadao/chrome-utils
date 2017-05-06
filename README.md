@@ -49,7 +49,7 @@ store.set('a.c', 1);
 store.get('a'); // {c: 1}
 
 store.set('a.b': 2);
-store.get('a'); // inject b, get {a: {b: 2, c: 'c'}}
+store.get('a'); // inject b, get {a: {b: 2, c: 1}}
 store.get('a.b'); // directly get b, return 2
 
 store.set('a.b': 3);
@@ -79,8 +79,13 @@ store.remove(key[, callback]);
 store.set({a: {b: 1, c: 2}});
 store.get('a'); // {b: 1, c: 2}
 
-store.remove('a.b'); // {b: null, c: 2}
-store.remove('a'); // null
+store.remove('a.b');
+// after remove
+store.get('a'); // => {b: null, c: 2}
+
+store.remove('a');
+// after remove
+store.get('a'); // => null
 ```
 
 ### message
@@ -131,6 +136,6 @@ i18n.get(...args);
 ## Todo
 
 - [x] remove `merge` api
-- [x] expire time for store
+- [ ] expire time for store
 - [x] test
-- [ ] more use case
+- [x] more use case

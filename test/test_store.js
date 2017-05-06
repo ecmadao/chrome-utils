@@ -134,10 +134,7 @@ describe('Store Test', () => {
       const obj = combineObj('a', 1);
 
       expect(obj).to.deep.equal({
-        a: {
-          _value: 1,
-          _expire: null
-        }
+        a: 1
       });
     });
 
@@ -146,10 +143,7 @@ describe('Store Test', () => {
 
       expect(obj).to.deep.equal({
         a: {
-          b: {
-            _value: 1,
-            _expire: null
-          }
+          b: 1
         }
       });
     });
@@ -159,10 +153,7 @@ describe('Store Test', () => {
 
       expect(obj).to.deep.equal({
         a: {
-          b: {
-            _value: { c: 1 },
-            _expire: null
-          }
+          b: { c: 1 }
         }
       });
     });
@@ -172,21 +163,7 @@ describe('Store Test', () => {
 
       expect(obj).to.deep.equal({
         a: {
-          b: {
-            _value: { c: 1, d: 2 },
-            _expire: null
-          }
-        }
-      });
-    });
-
-    it('should combine object with expire when set', () => {
-      const obj = combineObj('a', 1, 2 * 60 * 60); // 2 hours
-
-      expect(obj).to.deep.equal({
-        a: {
-          _value: 1,
-          _expire: timestamp() + 2 * 60 * 60
+          b: { c: 1, d: 2 }
         }
       });
     });

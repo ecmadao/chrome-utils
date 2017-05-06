@@ -1,5 +1,13 @@
 import objectAssign from '../utils/object-assign';
-import { getValue, getExpire, checkType, createObj, timestamp } from '../utils/helper';
+import {
+  getStoreValue,
+  getStoreExpire,
+  checkType,
+  createObj,
+  timestamp,
+  setValue,
+  getValue
+} from '../utils/helper';
 
 const _rawSet = (obj, resolve) => {
   chrome.storage.sync.set(obj, () => {
@@ -26,17 +34,7 @@ const _rawClear = (callback) => {
 };
 
 export const combineObj = (key, value, expire = null) => {
-  if (!checkType.isString(key)) {
-    throw new Error('first arg should be a string');
-  }
-  const _expire = checkType.isNumber(expire)
-    ? timestamp() + expire
-    : null;
-
-  return createObj(key, {
-    _value: value,
-    _expire
-  });
+  return key ? createObj(key, value) : value;
 };
 
 const getStorage = (key, resolve, reject = null) => {
@@ -44,10 +42,8 @@ const getStorage = (key, resolve, reject = null) => {
 
   const callback = (result) => {
     const value = getValue(result, key);
-    const expire = getExpire(result, key);
-    const isExpire = expire !== null && timestamp() > expire;
 
-    (value !== null && typeof value !== 'undefined') && !isExpire
+    (value !== null && typeof value !== 'undefined')
       ? resolve && resolve(value)
       : (reject
           ? reject && reject()
@@ -59,14 +55,15 @@ const getStorage = (key, resolve, reject = null) => {
 
 const setStorage = (key, value, options = {}) => {
   const resolve = checkType.isFunc(options.callback) ? options.callback : null;
+  const keys = key.split('.');
+  const mainKey = keys[0];
 
-  getStorage(key, (result) => {
-    const newValue = result && checkType.isObj(result)
-      ? objectAssign({}, result, value)
-      : value;
-    const obj = combineObj(key, newValue, options.expire);
+  getStorage(mainKey, (result) => {
+    const obj = combineObj(null, value);
+    const rawObj = {[mainKey]: result};
+    const newObj = setValue(rawObj, key, obj);
 
-    _rawSet(obj, resolve);
+    _rawSet(newObj, resolve);
   });
 };
 
@@ -77,8 +74,8 @@ const listenChange = (...args) => {
       if (listener) {
         const storageChange = changes[key];
         if (storageChange) {
-          const newValue = getValue({ [key]: storageChange.newValue }, listener.key);
-          const oldValue = getValue({ [key]: storageChange.oldValue }, listener.key);
+          const newValue = getStoreValue({ [key]: storageChange.newValue }, listener.key);
+          const oldValue = getStoreValue({ [key]: storageChange.oldValue }, listener.key);
           const changed = newValue !== oldValue;
           changed && listener.callback && listener.callback(newValue);
         }

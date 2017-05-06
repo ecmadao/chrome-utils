@@ -1,3 +1,5 @@
+import objectAssign from './object-assign';
+
 export const timestamp = () => Math.floor(Date.now() / 1000);
 
 const isWhat = (target, targetType) => Object.prototype.toString.call(target) === targetType;
@@ -23,7 +25,7 @@ export const checkType = {
  *
  * ===> result = 1
  */
-export const getValue = (object, key) => {
+export const getStoreValue = (object, key) => {
   if (!checkType.isObj(object)) return null;
   const sections = key.split('.');
   let result = object;
@@ -51,7 +53,40 @@ export const getValue = (object, key) => {
   return result;
 };
 
-export const getExpire = (object, key) => {
+export const getValue = (object, key) => {
+  if (!checkType.isObj(object)) return null;
+  const sections = key.split('.');
+
+  let result = object;
+  for (let i = 0; i < sections.length; i++) {
+    const section = sections[i];
+    result = checkType.isObj(result) ? result[section] : null;
+  }
+
+  return typeof result === 'undefined' ? null : result;
+};
+
+export const setValue = (object, key, value) => {
+  if (!checkType.isObj(object)) return createObj(key, value);
+  const sections = key.split('.');
+  let newObj = value;
+  let newValue = value;
+
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const section = sections[i];
+    const currentKey = sections.slice(0, i + 1).join('.');
+    const currentValue = getValue(object, currentKey);
+
+    const newValue = checkType.isObj(newObj)
+      ? objectAssign({}, currentValue, newObj)
+      : newObj;
+    newObj = {[section]: newValue};
+  }
+
+  return objectAssign(object, newObj);
+};
+
+export const getStoreExpire = (object, key) => {
   if (!checkType.isObj(object)) return null;
   const sections = key.split('.');
   let expire = null;
