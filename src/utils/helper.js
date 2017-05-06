@@ -1,8 +1,6 @@
 export const timestamp = () => Math.floor(Date.now() / 1000);
 
-const isWhat = (target, targetType) => {
-  return Object.prototype.toString.call(target) === targetType;
-};
+const isWhat = (target, targetType) => Object.prototype.toString.call(target) === targetType;
 
 export const checkType = {
   isFunc: (func) => isWhat(func, '[object Function]'),
@@ -35,8 +33,10 @@ export const getValue = (object, key) => {
       const { _value, _expire } = result;
       if (!_value) {
         const sectionObj = result[section];
-				result = sectionObj && sectionObj['_value'] ? sectionObj['_value'] : sectionObj;
-				continue;
+        result = sectionObj && sectionObj['_value']
+          ? sectionObj['_value']
+          : sectionObj;
+        continue;
       }
       if (checkType.isObj(_value)) {
         result = _value[section];

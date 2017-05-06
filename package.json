@@ -7,9 +7,11 @@
     "build": "babel src -d lib --copy-files",
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "mocha": "./node_modules/mocha/bin/mocha --compilers js:babel-register",
+    "pretest": "npm run --silent lint",
     "test": "npm run mocha --silent test",
     "prepublish": "in-publish && npm run build || not-in-publish",
     "tag": "git tag npm-v$npm_package_version",
+    "coveralls": "cat ./coverage/lcov/lcov.info | ./node_modules/.bin/coveralls",
     "postversion": "git commit package.json -m \"npm-v$npm_package_version\" && npm run tag && git push && git push --tags && npm publish --registry=https://registry.npmjs.org/"
   },
   "keywords": [
@@ -23,9 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-core": "^6.18.2",
-    "babel-polyfill": "^6.16.0",
-    "chai": "^3.5.0",
-    "mocha": "^3.3.0"
+    "babel-polyfill": "^6.16.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -34,6 +34,8 @@
     "babel-preset-env": "^1.2.1",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.16.0",
+    "chai": "^3.5.0",
+    "coveralls": "^2.13.1",
     "eslint": "^3.9.1",
     "eslint-config-standard": "^7.0.1",
     "eslint-plugin-babel": "^4.1.1",
@@ -41,6 +43,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^2.1.1",
     "in-publish": "^2.0.0",
+    "mocha": "^3.3.0",
     "sinon-chrome": "^2.2.1"
   }
 }

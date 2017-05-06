@@ -128,7 +128,7 @@ i18n.get(...args);
 
 ## Todo
 
-- [ ] remove `merge` api
+- [x] remove `merge` api
 - [x] expire time for store
 - [x] test
 - [ ] more use case
