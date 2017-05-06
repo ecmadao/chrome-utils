@@ -1,5 +1,7 @@
 # chrome-utils
 
+[![npm version](https://badge.fury.io/js/chrome-utils.svg)](https://badge.fury.io/js/chrome-utils) [![Build Status](https://travis-ci.org/ecmadao/chrome-utils.svg?branch=master)](https://travis-ci.org/ecmadao/chrome-utils) [![Coverage Status](https://coveralls.io/repos/github/ecmadao/chrome-utils/badge.svg?branch=master)](https://coveralls.io/github/ecmadao/chrome-utils?branch=master) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![chrome-utils](http://img.shields.io/npm/dm/chrome-utils.svg)](https://www.npmjs.com/package/chrome-utils) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ecmadao/chrome-utils/master/LICENSE)
+
 Some utils that help to build chrome extension. **HAVE NO DEPENDENCIES**.
 
 ## Usage
