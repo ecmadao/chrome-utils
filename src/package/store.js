@@ -1,10 +1,6 @@
-import objectAssign from '../utils/object-assign';
 import {
-  getStoreValue,
-  getStoreExpire,
   checkType,
   createObj,
-  timestamp,
   setValue,
   getValue
 } from '../utils/helper';
@@ -74,8 +70,8 @@ const listenChange = (...args) => {
       if (listener) {
         const storageChange = changes[key];
         if (storageChange) {
-          const newValue = getStoreValue({ [key]: storageChange.newValue }, listener.key);
-          const oldValue = getStoreValue({ [key]: storageChange.oldValue }, listener.key);
+          const newValue = getValue({ [key]: storageChange.newValue }, listener.key);
+          const oldValue = getValue({ [key]: storageChange.oldValue }, listener.key);
           const changed = newValue !== oldValue;
           changed && listener.callback && listener.callback(newValue);
         }

@@ -42,7 +42,7 @@
     "no-extra-bind": 1,
     "no-var": "error",
     "arrow-spacing": ["error", { "before": true, "after": true }],
-    "arrow-body-style": ["error", "as-needed"],
+    "arrow-body-style": 0,
     "no-empty-function": ["error", { "allow": ["arrowFunctions", "constructors"] }],
     "import/no-unresolved": [2, {"commonjs": true, "amd": true}],
     "import/namespace": 2,

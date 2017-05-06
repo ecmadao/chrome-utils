@@ -70,7 +70,6 @@ export const setValue = (object, key, value) => {
   if (!checkType.isObj(object)) return createObj(key, value);
   const sections = key.split('.');
   let newObj = value;
-  let newValue = value;
 
   for (let i = sections.length - 1; i >= 0; i--) {
     const section = sections[i];
