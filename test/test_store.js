@@ -1,6 +1,6 @@
 import chrome from 'sinon-chrome';
 import chai from 'chai';
-import store, { _combineObj } from '../src/package/store';
+import store, { combineObj } from '../src/package/store';
 import { timestamp } from '../src/utils/helper';
 import { MOCK_USER, MOCK_CONFIG } from './mock';
 
@@ -31,15 +31,15 @@ describe('Store Test', () => {
   describe('test store.get', () => {
     before(() => {
       chrome.storage.local.get.withArgs(TEST_DATAS[0].key).yields(
-        _combineObj(TEST_DATAS[0].key, TEST_DATAS[0].value, TEST_DATAS[0].expire)
+        combineObj(TEST_DATAS[0].key, TEST_DATAS[0].value, TEST_DATAS[0].expire)
       );
 
       chrome.storage.local.get.withArgs(TEST_DATAS[1].key).yields(
-        _combineObj(TEST_DATAS[1].key, TEST_DATAS[1].value, TEST_DATAS[1].expire)
+        combineObj(TEST_DATAS[1].key, TEST_DATAS[1].value, TEST_DATAS[1].expire)
       );
 
       chrome.storage.local.get.withArgs(TEST_DATAS[2].key).yields(
-        _combineObj(TEST_DATAS[2].key, TEST_DATAS[2].value, TEST_DATAS[2].expire)
+        combineObj(TEST_DATAS[2].key, TEST_DATAS[2].value, TEST_DATAS[2].expire)
       );
     });
 
@@ -74,7 +74,7 @@ describe('Store Test', () => {
   describe('test store.get -> get user', () => {
     before(() => {
       chrome.storage.local.get.withArgs('user').yields(
-        _combineObj('user', MOCK_USER, null)
+        combineObj('user', MOCK_USER, null)
       );
     });
 
@@ -106,7 +106,7 @@ describe('Store Test', () => {
   describe('test store.get -> get config', () => {
     before(() => {
       chrome.storage.local.get.withArgs('config').yields(
-        _combineObj('config', MOCK_CONFIG, null)
+        combineObj('config', MOCK_CONFIG, null)
       );
     });
 
@@ -129,9 +129,9 @@ describe('Store Test', () => {
     });
   });
 
-  describe('test _combineObj', () => {
+  describe('test combineObj', () => {
     it('should combine object when set', () => {
-      const obj = _combineObj('a', 1);
+      const obj = combineObj('a', 1);
 
       expect(obj).to.deep.equal({
         a: {
@@ -142,7 +142,7 @@ describe('Store Test', () => {
     });
 
     it('should combine object when set', () => {
-      const obj = _combineObj('a.b', 1);
+      const obj = combineObj('a.b', 1);
 
       expect(obj).to.deep.equal({
         a: {
@@ -155,7 +155,7 @@ describe('Store Test', () => {
     });
 
     it('should combine object when set', () => {
-      const obj = _combineObj('a.b', { c: 1 });
+      const obj = combineObj('a.b', { c: 1 });
 
       expect(obj).to.deep.equal({
         a: {
@@ -168,7 +168,7 @@ describe('Store Test', () => {
     });
 
     it('should combine object when set', () => {
-      const obj = _combineObj('a.b', { c: 1, d: 2 });
+      const obj = combineObj('a.b', { c: 1, d: 2 });
 
       expect(obj).to.deep.equal({
         a: {
@@ -181,7 +181,7 @@ describe('Store Test', () => {
     });
 
     it('should combine object with expire when set', () => {
-      const obj = _combineObj('a', 1, 2 * 60 * 60); // 2 hours
+      const obj = combineObj('a', 1, 2 * 60 * 60); // 2 hours
 
       expect(obj).to.deep.equal({
         a: {

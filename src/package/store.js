@@ -25,7 +25,7 @@ const _rawClear = (callback) => {
   });
 };
 
-export const _combineObj = (key, value, expire = null) => {
+export const combineObj = (key, value, expire = null) => {
   if (!checkType.isString(key)) {
     throw new Error('first arg should be a string');
   }
@@ -64,7 +64,7 @@ const setStorage = (key, value, options = {}) => {
     const newValue = result && checkType.isObj(result)
       ? objectAssign({}, result, value)
       : value;
-    const obj = _combineObj(key, newValue, options.expire);
+    const obj = combineObj(key, newValue, options.expire);
 
     _rawSet(obj, resolve);
   });
