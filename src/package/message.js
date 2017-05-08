@@ -43,6 +43,7 @@ const sendToTab = (msg, tabId) => {
 };
 
 const sendToTabs = (msg = {}, query = {}, filterTabs = null) => {
+  _checkMsg(msg);
   chrome.tabs.query(query, (tabs) => {
     let targetTabs = tabs;
     if (checkType.isFunc(filterTabs)) {
@@ -52,9 +53,14 @@ const sendToTabs = (msg = {}, query = {}, filterTabs = null) => {
   });
 };
 
+const sendBgMsg = (msg, callback) => {
+  sendToTabs(msg, {active:true, currentWindow: true});
+};
+
 export default {
   register,
   sendMsg,
   sendToTab,
-  sendToTabs
+  sendToTabs,
+  sendBgMsg
 };
