@@ -32,7 +32,7 @@ export const getStoreValue = (object, key) => {
   for (let i = 0; i < sections.length; i++) {
     const section = sections[i];
     if (result && checkType.isObj(result)) {
-      const { _value, _expire } = result;
+      const { _value } = result;
       if (!_value) {
         const sectionObj = result[section];
         result = sectionObj && sectionObj['_value']

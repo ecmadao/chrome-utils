@@ -54,7 +54,7 @@ const sendToTabs = (msg = {}, query = {}, filterTabs = null) => {
 };
 
 const sendBgMsg = (msg) => {
-  sendToTabs(msg, {active:true, currentWindow: true});
+  sendToTabs(msg, {active: true, currentWindow: true});
 };
 
 export default {
