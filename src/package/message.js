@@ -53,7 +53,7 @@ const sendToTabs = (msg = {}, query = {}, filterTabs = null) => {
   });
 };
 
-const sendBgMsg = (msg, callback) => {
+const sendBgMsg = (msg) => {
   sendToTabs(msg, {active:true, currentWindow: true});
 };
 
