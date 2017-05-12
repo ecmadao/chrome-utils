@@ -5,6 +5,8 @@ import {
   getValue
 } from '../utils/helper';
 
+/* ========================= raw api of chrome.storage.sync ========================= */
+
 const _rawSet = (obj, resolve) => {
   chrome.storage.sync.set(obj, () => {
     resolve && resolve();
@@ -28,6 +30,8 @@ const _rawClear = (callback) => {
     callback && callback();
   });
 };
+
+/* ========================= export better api ========================= */
 
 export const combineObj = (key, value, expire = null) => {
   return key ? createObj(key, value) : value;

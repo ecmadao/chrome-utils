@@ -17,3 +17,5 @@ cache:
     - node_modules
 after_script:
     - npm run coveralls
+notifications:
+  slack: ecmadao:fKFA5rnMSWRUqZrA9bS3gaD2
