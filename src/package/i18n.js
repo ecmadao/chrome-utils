@@ -4,7 +4,11 @@ const getAcceptLanguages = (callback) => {
   });
 };
 
-const getMessage = (...args) => chrome.i18n.getMessage(...args);
+const getMessage = (...args) => {
+  const result = chrome.i18n.getMessage(...args);
+  if (!result || !result.length) return null;
+  return result;
+};
 
 export default {
   acceptLanguages: getAcceptLanguages,
