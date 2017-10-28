@@ -162,3 +162,11 @@ i18n.get(...args);
 - [ ] expire time for store
 - [x] test
 - [x] more use case
+
+## Contributors
+
+- [berstend](https://github.com/berstend)
+
+## License
+
+[MIT License](./LICENSE)
