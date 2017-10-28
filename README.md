@@ -63,8 +63,8 @@ store.listen(...listeners);
 
 // listener
 const listener = {
-  key, // the key you wanna to listen change
-  callback
+	key, // the key you wanna to listen change
+	callback
 };
 const listeners = [listener1, listener2, listener3];
 ```
@@ -88,6 +88,29 @@ store.remove('a');
 store.get('a'); // => null
 ```
 
+### storeAsync
+
+Uses promises instead of callbacks. Plays well with `async/await`.
+
+```javascript
+import { storeAsync as store } from 'chrome-utils';
+
+// with promises
+store.set('a', "xxx").then(e => console.log("done"))
+store.get('a').then(e => console.log(e))
+store.remove('a').then(e => console.log("done"))
+store.clear().then(e => console.log("done"))
+
+// with async/await
+(async function() {
+		await store.set("b", "yyy")
+		const b = await store.get("b")
+		console.debug("b", b)
+})()
+```
+
+
+
 ### message
 
 Compare with raw API `chrome.runtime.onMessage` & `chrome.runtime.sendMessage`, it:
@@ -102,8 +125,8 @@ message.sendMsg(msg[, callback]);
 
 // msg
 const msg = {
-  type, // required
-  data
+	type, // required
+	data
 };
 ```
 
@@ -120,8 +143,8 @@ message.register(...listeners);
 
 // listener
 const listener = {
-  callback, // required,
-  type // not required, but if you use it, this listener will only listen same type msg
+	callback, // required,
+	type // not required, but if you use it, this listener will only listen same type msg
 };
 ```
 
