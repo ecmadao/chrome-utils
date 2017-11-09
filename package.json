@@ -23,6 +23,7 @@
   ],
   "author": "ecmadao",
   "license": "MIT",
+  "homepage": "https://github.com/ecmadao/chrome-utils",
   "dependencies": {
     "babel-core": "^6.18.2",
     "babel-polyfill": "^6.16.0"

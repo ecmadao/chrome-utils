@@ -48,11 +48,11 @@ store.set(key, value[, options]);
 store.set('a.c', 1);
 store.get('a'); // {c: 1}
 
-store.set('a.b': 2);
-store.get('a'); // inject b, get {a: {b: 2, c: 1}}
+store.set('a.b', 2);
+store.get('a'); // inject b, get {b: 2, c: 1}
 store.get('a.b'); // directly get b, return 2
 
-store.set('a.b': 3);
+store.set('a.b', 3);
 store.get('a.b'); // update, get 3
 ```
 

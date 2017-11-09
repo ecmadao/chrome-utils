@@ -13,7 +13,7 @@ const _rawSet = (obj, resolve) => {
   });
 };
 
-const _rowGet = (key, resolve) => {
+const _rawGet = (key, resolve) => {
   chrome.storage.sync.get(key, (result) => {
     resolve && resolve(result);
   });
@@ -50,7 +50,7 @@ const getStorage = (key, resolve, reject = null) => {
           : resolve && resolve(null)
         );
   };
-  _rowGet(mainKey, callback);
+  _rawGet(mainKey, callback);
 };
 
 const setStorage = (key, value, options = {}) => {
